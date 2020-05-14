@@ -28,7 +28,7 @@ class PokerGame {
     public void start() {
         initialDraw();
         playerTurn();
-        //dealerTurn();
+        dealerTurn();
         result();
         askContinueOrNot();
     }
@@ -53,7 +53,7 @@ class PokerGame {
         dealerHands.add(deck.draw());
     }
     
-    private void playerTurn() {
+    private void playerTurn() { 
         int userInput = -1;
         System.out.println("あなたのカード:");
         printCards(playerHands);
@@ -68,17 +68,22 @@ class PokerGame {
         for (int i = 0; i < userInput; i++) {
             System.out.println((i + 1) + "枚目");
             num = in.nextInt();
-            playerHands.remove(num - 1);  //ここで指定した場所の要素を消したい
-            playerHands.add(deck.draw());
+            playerHands.remove(num - 1);  //ここで指定した場所の要素を消す
+            playerHands.add(deck.draw()); //すぐに追加する
         }
+    }
         
-        for (int i = 0; i < userInput; i++) {
-            playerHands.add(deck.draw());
+    private void dealerTurn() {
+       int dealerScore = computeScore(dealerHands);
+       
+       if (dealerScore < 2) {
+           dealerHands.clear();
+           for (int i = 0; i < 5; i++) {
+               dealerHands.add(deck.draw());
+            }
         }
-        
-    /*private void dealerTurn() {
-       * int dealerScore = computeScore(dealerHands);
-    */}
+    }
+    
     
     private int computeScore(List<Card> cards) {
         int score = 1;
@@ -125,7 +130,9 @@ class PokerGame {
         int dealerScore = computeScore(dealerHands);
         System.out.println("あなたのカード");
         printCards(playerHands);
+        System.out.print("あなた:");
         role(playerScore);
+        System.out.print("CPU:");
         role(dealerScore);
         
         if (playerScore > dealerScore) {
